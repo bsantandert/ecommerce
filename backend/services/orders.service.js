@@ -6,7 +6,7 @@ const listPerPage = 10;
 async function get(page = 1) {
   const offset = helper.getOffset(page, listPerPage);
   const result = await db.query(
-    "SELECT id, amount, status, created_at FROM order LIMIT $1 OFFSET $2",
+    "SELECT id, amount, status, created_at FROM customer_order LIMIT $1 OFFSET $2",
     [listPerPage, offset]
   );
   const data = result.rows || [];
@@ -25,7 +25,7 @@ async function create(order) {
     const currentDateTime = moment.utc().format();
     await client.query("BEGIN");
     const createOrderQuery =
-      "INSERT INTO public.order (amount, status, created_at) VALUES ($1, $2, $3) RETURNING *";
+      "INSERT INTO customer_order (amount, status, created_at) VALUES ($1, $2, $3) RETURNING *";
 
     const createOrderResult = await client.query(createOrderQuery, [
       order.amount,
@@ -37,7 +37,7 @@ async function create(order) {
 
     for (let index = 0; index < productIds.length; index++) {
       const orderProductQuery =
-        "INSERT INTO order_product(order_id, product_id) VALUES ($1, $2)";
+        "INSERT INTO customer_order_product(order_id, product_id) VALUES ($1, $2)";
       await client.query(orderProductQuery, [
         orderCreated.id,
         productIds[index],
@@ -64,17 +64,17 @@ async function update(id, order) {
     await client.query("BEGIN");
 
     const deleteOrderProductsQuery =
-      "DELETE FROM order_product WHERE order_id=$1";
+      "DELETE FROM customer_order_product WHERE order_id=$1";
     await client.query(deleteOrderProductsQuery, [id]);
 
     for (let index = 0; index < productIds.length; index++) {
       const orderProductQuery =
-        "INSERT INTO order_product(order_id, product_id) VALUES ($1, $2)";
+        "INSERT INTO customer_order_product(order_id, product_id) VALUES ($1, $2)";
       await client.query(orderProductQuery, [id, productIds[index]]);
     }
 
     const updateOrderQuery =
-      "UPDATE public.order SET amount=$1, status=$2 WHERE id=$3 RETURNING *";
+      "UPDATE customer_order SET amount=$1, status=$2 WHERE id=$3 RETURNING *";
 
     const updateOrderResult = await client.query(updateOrderQuery, [
       order.amount,
@@ -101,10 +101,10 @@ async function remove(id) {
     await client.query("BEGIN");
 
     const deleteOrderProductsQuery =
-      "DELETE FROM order_product WHERE order_id=$1";
+      "DELETE FROM customer_order_product WHERE order_id=$1";
     await client.query(deleteOrderProductsQuery, [id]);
 
-    const deleteOrderQuery = "DELETE FROM public.order WHERE id=$1";
+    const deleteOrderQuery = "DELETE FROM customer_order WHERE id=$1";
 
     await client.query(deleteOrderQuery, [id]);
 
