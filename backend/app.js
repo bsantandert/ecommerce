@@ -3,6 +3,9 @@ var express = require("express");
 var path = require("path");
 var logger = require("morgan");
 
+var productsRouter = require('./routes/products.route');
+var ordersRouter = require('./routes/orders.route');
+
 var app = express();
 
 app.use(logger("dev"));
@@ -13,6 +16,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", function (req, res) {
   res.send("Backend Service");
 });
+
+app.use('/products', productsRouter);
+app.use('/orders', ordersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
