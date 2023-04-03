@@ -57,12 +57,11 @@ const Products = () => {
 
   return (
     <SimpleGrid cols={4} spacing="lg" verticalSpacing="xl">
-      {products.map((product) => (
-        <Card withBorder radius="md" p="md" className={classes.card}>
+      {products.map((product, index) => (
+        <Card key={index} withBorder radius="md" p="md" className={classes.card}>
           <Card.Section>
             <Image src={product.image_url} alt={product.name} height={450} />
           </Card.Section>
-
           <Card.Section className={classes.section} mt="md">
             <Group position="apart">
               <Text fz="lg" fw={500}>
