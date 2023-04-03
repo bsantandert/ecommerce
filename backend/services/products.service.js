@@ -17,6 +17,19 @@ async function get(page = 1) {
   };
 }
 
+async function getById(id) {
+  const result = await db.query(
+    "SELECT id, sku, name, description, stock, price, image_url FROM product WHERE id=$1",
+    [id]
+  );
+  const data = result.rows[0];
+
+  return {
+    data,
+  };
+}
+
 module.exports = {
   get,
+  getById,
 };

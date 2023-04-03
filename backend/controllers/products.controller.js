@@ -9,6 +9,16 @@ async function get(req, res, next) {
   }
 }
 
+async function getById(req, res, next) {
+  try {
+    res.json(await productsService.getById(req.params.id));
+  } catch (err) {
+    console.error(`Error while getting product`, err.message);
+    next(err);
+  }
+}
+
 module.exports = {
   get,
+  getById,
 };
