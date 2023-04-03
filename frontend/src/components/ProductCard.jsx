@@ -36,7 +36,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const ProductCard = ({ key, product }) => {
+const ProductCard = ({ product, hideActions = false }) => {
   const { classes } = useStyles();
   const navigate = useNavigate();
 
@@ -44,7 +44,13 @@ const ProductCard = ({ key, product }) => {
     navigate(path);
   };
   return (
-    <Card key={key} withBorder radius="md" p="md" className={classes.card}>
+    <Card
+      key={product.id}
+      withBorder
+      radius="md"
+      p="md"
+      className={classes.card}
+    >
       <Card.Section>
         <Image src={product.image_url} alt={product.name} height={450} />
       </Card.Section>
@@ -59,15 +65,17 @@ const ProductCard = ({ key, product }) => {
           {product.description}
         </Text>
       </Card.Section>
-      <Group mt="xs">
-        <Button
-          radius="md"
-          style={{ flex: 1 }}
-          onClick={() => goToProductDetail(`/products/${product.id}`)}
-        >
-          Show details
-        </Button>
-      </Group>
+      {!hideActions && (
+        <Group mt="xs">
+          <Button
+            radius="md"
+            style={{ flex: 1 }}
+            onClick={() => goToProductDetail(`/products/${product.id}`)}
+          >
+            Show details
+          </Button>
+        </Group>
+      )}
     </Card>
   );
 };

@@ -16,8 +16,8 @@ const Products = () => {
 
   return (
     <SimpleGrid cols={4} spacing="lg" verticalSpacing="xl">
-      {products.map((product, index) => (
-        <ProductCard key={index} product={product}></ProductCard>
+      {products.map((product) => (
+        <ProductCard product={product}></ProductCard>
       ))}
     </SimpleGrid>
   );
