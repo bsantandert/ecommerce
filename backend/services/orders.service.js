@@ -1,20 +1,36 @@
 var moment = require("moment");
 const db = require("./db.service");
-const helper = require("../utils/helper.util");
-const listPerPage = 10;
 
-async function get(page = 1) {
-  const offset = helper.getOffset(page, listPerPage);
+async function get() {
   const result = await db.query(
-    "SELECT id, amount, status, created_at FROM customer_order LIMIT $1 OFFSET $2",
-    [listPerPage, offset]
+    "SELECT id, amount, status, created_at FROM customer_order"
   );
   const data = result.rows || [];
-  const meta = { page };
 
   return {
     data,
-    meta,
+  };
+}
+
+async function getById(id) {
+  const getOrderResult = await db.query(
+    "SELECT id, amount, status, created_at FROM customer_order WHERE id=$1",
+    [id]
+  );
+  const order = getOrderResult.rows[0];
+
+  const orderProductsResult = await db.query(
+    `SELECT pro.id, pro.name, pro.description, pro.price, pro.image_url, pro.sku, cop.quantity 
+    FROM product AS pro INNER JOIN customer_order_product AS cop ON pro.id = cop.product_id 
+    WHERE cop.customer_order_id = $1`,
+    [id]
+  );
+
+  const orderProducts = orderProductsResult.rows;
+
+  return {
+    ...order,
+    products: orderProducts,
   };
 }
 
@@ -122,6 +138,7 @@ async function remove(id) {
 
 module.exports = {
   get,
+  getById,
   create,
   update,
   remove,

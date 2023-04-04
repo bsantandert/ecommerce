@@ -2,7 +2,16 @@ const ordersService = require("../services/orders.service");
 
 async function get(req, res, next) {
   try {
-    res.json(await ordersService.get(req.query.page));
+    res.json(await ordersService.get());
+  } catch (err) {
+    console.error(`Error while getting orders`, err.message);
+    next(err);
+  }
+}
+
+async function getById(req, res, next) {
+  try {
+    res.json(await ordersService.getById(req.params.id));
   } catch (err) {
     console.error(`Error while getting orders`, err.message);
     next(err);
@@ -38,6 +47,7 @@ async function remove(req, res, next) {
 
 module.exports = {
   get,
+  getById,
   create,
   update,
   remove,
