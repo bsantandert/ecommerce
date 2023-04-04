@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { createStyles, Header, Container, Group, rem } from "@mantine/core";
+import {
+  createStyles,
+  Header,
+  Container,
+  Group,
+  rem,
+  ActionIcon,
+} from "@mantine/core";
+import { IconShoppingCart } from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -50,11 +58,11 @@ const NavBar = () => {
   useEffect(() => {
     setActive(location.pathname);
   }, [location.pathname]);
-  
+
   const links = [
     { label: "Products", link: "/products" },
     { label: "Orders", link: "/orders" },
-    { label: "Order", link: "/order" },
+    { label: "Cart", link: "/cart", icon: <IconShoppingCart size="1rem" /> },
   ];
 
   const items = links.map((link) => (
@@ -65,7 +73,12 @@ const NavBar = () => {
         [classes.linkActive]: active === link.link,
       })}
     >
-      {link.label}
+      {link.icon && (
+        <ActionIcon size="xl" variant="default">
+          {link.icon}
+        </ActionIcon>
+      )}
+      {!link.icon && link.label}
     </a>
   ));
   return (
