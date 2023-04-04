@@ -46,4 +46,18 @@ const fetchOrders = async () => {
   }
 };
 
-export { fetchOrders, submitOrder };
+const fetchOrderById = async (id) => {
+  try {
+    return await fetchData(`orders/${id}`);
+  } catch (error) {
+    notifications.show({
+      title: "Error ocurred while fetching order",
+      message: error.message,
+      autoClose: false,
+      color: "red",
+    });
+    return [];
+  }
+};
+
+export { fetchOrders, fetchOrderById, submitOrder };
