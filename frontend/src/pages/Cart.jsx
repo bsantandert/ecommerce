@@ -14,10 +14,10 @@ import {
   NumberInput,
 } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
-import { submitOrder } from "../api/orders";
-import { PENDING } from "../constants/orders";
+import { submitOrder } from "../api/orders.api";
+import { PENDING } from "../constants/orders.constants";
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   content: {
     display: "flex",
     flexDirection: "row",
@@ -36,7 +36,7 @@ const useStyles = createStyles((theme) => ({
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { cartItems, removeItem, updateItem, total, itemCount } =
+  const { cartItems, removeItem, updateItem, total, itemCount, clearCart } =
     useContext(CartContext);
   const { classes } = useStyles();
 
@@ -51,6 +51,7 @@ const Cart = () => {
   const submit = async () => {
     await submitOrder(cartItems, total, PENDING, () => {
       navigate("/products");
+      clearCart();
     });
   };
 

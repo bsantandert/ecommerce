@@ -40,8 +40,8 @@ const ProductCard = ({ product, hideActions = false }) => {
   const { classes } = useStyles();
   const navigate = useNavigate();
 
-  const goToProductDetail = (path) => {
-    navigate(path);
+  const goToProductDetail = (productId) => {
+    navigate(`/products/${productId}`);
   };
   return (
     <Card
@@ -70,7 +70,7 @@ const ProductCard = ({ product, hideActions = false }) => {
           <Button
             radius="md"
             style={{ flex: 1 }}
-            onClick={() => goToProductDetail(`/products/${product.id}`)}
+            onClick={() => goToProductDetail(product.id)}
           >
             Show details
           </Button>

@@ -24,7 +24,7 @@ const submitOrder = async (cartItems, amount, status, onSuccess) => {
     onSuccess();
   } catch (error) {
     notifications.show({
-      title: "Error ocurred",
+      title: "Error ocurred while creating the order",
       message: error.message,
       autoClose: false,
       color: "red",
@@ -32,4 +32,18 @@ const submitOrder = async (cartItems, amount, status, onSuccess) => {
   }
 };
 
-export { submitOrder };
+const fetchOrders = async () => {
+  try {
+    return await fetchData("orders");
+  } catch (error) {
+    notifications.show({
+      title: "Error ocurred while fetching orders",
+      message: error.message,
+      autoClose: false,
+      color: "red",
+    });
+    return [];
+  }
+};
+
+export { fetchOrders, submitOrder };
