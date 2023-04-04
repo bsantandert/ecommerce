@@ -1,10 +1,9 @@
-import { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import CartContext from "../context/cart/CartContext";
 import {
   createStyles,
   Group,
-  rem,
   Card,
   Image,
   Text,

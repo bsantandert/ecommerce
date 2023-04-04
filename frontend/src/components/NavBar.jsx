@@ -84,7 +84,7 @@ const NavBar = () => {
   return (
     <Header height={60} mb={120}>
       <Container className={classes.header}>
-        <img height={50} src="./logo.png"></img>
+        <img height={50} src="./logo.png" alt="logo"></img>
         <Group spacing={5}>{items}</Group>
       </Container>
     </Header>
