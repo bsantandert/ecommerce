@@ -2,7 +2,8 @@ import { useReducer } from "react";
 import CartContext from "./CartContext";
 import CartReducer, { sumItems } from "./CartReducer";
 import {
-  ADD_TO_CART,
+  ADD_ITEM,
+  UPDATE_ITEM,
   REMOVE_ITEM,
   INCREASE,
   DECREASE,
@@ -23,8 +24,8 @@ const CartState = ({ children }) => {
 
   const [state, dispatch] = useReducer(CartReducer, initialState);
 
-  const addToCart = (payload) => {
-    dispatch({ type: ADD_TO_CART, payload });
+  const addItem = (payload) => {
+    dispatch({ type: ADD_ITEM, payload });
   };
 
   const increase = (payload) => {
@@ -35,8 +36,12 @@ const CartState = ({ children }) => {
     dispatch({ type: DECREASE, payload });
   };
 
-  const removeFromCart = (payload) => {
+  const removeItem = (payload) => {
     dispatch({ type: REMOVE_ITEM, payload });
+  };
+
+  const updateItem = (payload) => {
+    dispatch({ type: UPDATE_ITEM, payload });
   };
 
   const clearCart = () => {
@@ -52,8 +57,9 @@ const CartState = ({ children }) => {
       value={{
         showCart: state.showCart,
         cartItems: state.cartItems,
-        addToCart,
-        removeFromCart,
+        addItem,
+        removeItem,
+        updateItem,
         increase,
         decrease,
         handleCheckout,
