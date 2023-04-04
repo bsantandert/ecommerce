@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const ProductDetails = () => {
-  const quantityRef = useRef();
+  const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState([]);
   const { addItem, cartItems, increase } = useContext(CartContext);
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const ProductDetails = () => {
   const addToOrder = () => {
     const productToAdd = {
       ...product,
-      quantity: parseInt(quantityRef.current.value),
+      quantity: quantity,
     };
     if (isInCart) {
       increase(productToAdd);
@@ -72,15 +72,23 @@ const ProductDetails = () => {
             {!isInStock && <Text c="red">No Stock Available</Text>}
             {isInStock && <Text c="teal">In Stock</Text>}
             <NumberInput
-              ref={quantityRef}
-              defaultValue={1}
+              value={quantity}
               max={product.stock}
               min={1}
               disabled={!isInStock}
               placeholder="Quantity"
               label="Quantity"
               withAsterisk
+              onChange={setQuantity}
             />
+            <Group>
+              <Text size="md" color="dimmed">
+                Subtotal:
+              </Text>
+              <Text weight={500} size="sm">
+                {quantity * product.price} $
+              </Text>
+            </Group>
             <Group mt="xs">
               <Button
                 radius="md"
