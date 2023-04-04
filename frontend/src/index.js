@@ -14,7 +14,7 @@ root.render(
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <BrowserRouter>
         <App />
-        <Notifications />
+        <Notifications position="top-right" />
       </BrowserRouter>
     </MantineProvider>
   </CartState>

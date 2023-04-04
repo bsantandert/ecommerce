@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchData } from "../api/fetchAPI";
-import { SimpleGrid } from "@mantine/core";
+import { SimpleGrid, Container } from "@mantine/core";
 import ProductCard from "../components/ProductCard";
 
 const Products = () => {
@@ -15,11 +15,13 @@ const Products = () => {
   }, []);
 
   return (
-    <SimpleGrid cols={4} spacing="lg" verticalSpacing="xl">
-      {products.map((product) => (
-        <ProductCard product={product}></ProductCard>
-      ))}
-    </SimpleGrid>
+    <Container>
+      <SimpleGrid cols={3} spacing="lg" verticalSpacing="xl">
+        {products.map((product) => (
+          <ProductCard product={product}></ProductCard>
+        ))}
+      </SimpleGrid>
+    </Container>
   );
 };
 

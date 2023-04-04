@@ -1,4 +1,8 @@
 const fetchJSON = async (url, options = {}) => {
+  options.headers = {
+    "Content-Type": "application/json",
+    ...(options?.headers || {}),
+  };
   const response = await fetch(url, options);
   if (!response.ok) {
     const error = await response.json();
