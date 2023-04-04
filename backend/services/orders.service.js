@@ -29,8 +29,10 @@ async function getById(id) {
   const orderProducts = orderProductsResult.rows;
 
   return {
-    ...order,
-    products: orderProducts,
+    data: {
+      ...order,
+      products: orderProducts,
+    },
   };
 }
 
