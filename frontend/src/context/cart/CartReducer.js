@@ -1,6 +1,6 @@
 import {
   REMOVE_ITEM,
-  ADD_TO_CART,
+  ADD_ITEM,
   INCREASE,
   DECREASE,
   SUBMIT,
@@ -29,7 +29,7 @@ export const sumItems = (cartItems) => {
 
 const CartReducer = (state, action) => {
   switch (action.type) {
-    case ADD_TO_CART:
+    case ADD_ITEM:
       if (!state.cartItems.find((item) => item.id === action.payload.id)) {
         const newCartItems = [...state.cartItems, action.payload];
         return {
