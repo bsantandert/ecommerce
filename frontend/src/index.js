@@ -5,16 +5,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
+import CartState from "./context/cart/CartState";
+import { Notifications } from '@mantine/notifications';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <CartState>
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <BrowserRouter>
         <App />
+        <Notifications />
       </BrowserRouter>
     </MantineProvider>
-  </React.StrictMode>
+  </CartState>
 );
 
 // If you want to start measuring performance in your app, pass a function
