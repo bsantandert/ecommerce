@@ -21,7 +21,6 @@ async function get(page = 1) {
 async function create(order) {
   const client = await db.pool.connect();
   try {
-    const productIds = order.productIds;
     const currentDateTime = moment.utc().format();
     await client.query("BEGIN");
     const createOrderQuery =
@@ -35,12 +34,13 @@ async function create(order) {
 
     const orderCreated = createOrderResult.rows[0];
 
-    for (let index = 0; index < productIds.length; index++) {
+    for (let index = 0; index < order.products.length; index++) {
       const orderProductQuery =
-        "INSERT INTO customer_order_product(order_id, product_id) VALUES ($1, $2)";
+        "INSERT INTO customer_order_product(customer_order_id, product_id, quantity) VALUES ($1, $2, $3)";
       await client.query(orderProductQuery, [
         orderCreated.id,
-        productIds[index],
+        order.products[index].id,
+        order.products[index].quantity,
       ]);
     }
 
