@@ -6,6 +6,7 @@ const cors = require("cors");
 
 var productsRouter = require("./routes/products.route");
 var ordersRouter = require("./routes/orders.route");
+var employeesRouter = require("./routes/employees.route");
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.get("/", function (req, res) {
 
 app.use("/products", productsRouter);
 app.use("/orders", ordersRouter);
+app.use("/employees", employeesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
