@@ -15,4 +15,18 @@ const fetchProducts = async (search) => {
   }
 };
 
-export { fetchProducts };
+const fetchProductById = async (id) => {
+  try {
+    return await fetchData(`products/${id}`);
+  } catch (error) {
+    notifications.show({
+      title: "Error ocurred while fetching product",
+      message: error.message,
+      autoClose: false,
+      color: "red",
+    });
+    return [];
+  }
+};
+
+export { fetchProducts, fetchProductById };

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchData } from "../api/fetchAPI";
+import { fetchProductById } from "../api/products.api";
 import ProductCard from "../components/ProductCard";
 import CartContext from "../context/cart/CartContext";
 import {
@@ -42,11 +42,11 @@ const ProductDetails = () => {
   const isInCart = !!cartItems.find((item) => item.id === product?.id);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const product = await fetchData(`products/${id}`);
+    const fetchProduct = async () => {
+      const product = await fetchProductById(id);
       setProduct(product.data);
     };
-    fetchProducts();
+    fetchProduct();
   }, [id]);
 
   const addToOrder = () => {
