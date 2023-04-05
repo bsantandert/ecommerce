@@ -7,34 +7,20 @@ import {
   CLEAR,
   UPDATE_ITEM,
 } from "./CartTypes.js";
-
-const Storage = (cartItems) => {
-  localStorage.setItem(
-    "cartItems",
-    JSON.stringify(cartItems.length > 0 ? cartItems : [])
-  );
-};
-
-export const sumItems = (cartItems) => {
-  Storage(cartItems);
-  let itemCount = cartItems.reduce(
-    (total, product) => total + product.quantity,
-    0
-  );
-  let total = cartItems
-    .reduce((total, product) => total + product.price * product.quantity, 0)
-    .toFixed(2);
-  return { itemCount, total };
-};
+import {
+  calculateQuantityAndTotal,
+  setCartItems,
+} from "../../utils/cart.utils.js";
 
 const CartReducer = (state, action) => {
   switch (action.type) {
     case ADD_ITEM:
       if (!state.cartItems.find((item) => item.id === action.payload.id)) {
         const newCartItems = [...state.cartItems, action.payload];
+        setCartItems(newCartItems);
         return {
           ...state,
-          ...sumItems(newCartItems),
+          ...calculateQuantityAndTotal(newCartItems),
           cartItems: newCartItems,
         };
       }
@@ -43,9 +29,10 @@ const CartReducer = (state, action) => {
         ...state.cartItems.filter((item) => item.id !== action.payload.id),
         action.payload,
       ];
+      setCartItems(updatedCartItems);
       return {
         ...state,
-        ...sumItems(updatedCartItems),
+        ...calculateQuantityAndTotal(updatedCartItems),
         cartItems: updatedCartItems,
       };
 
@@ -53,9 +40,10 @@ const CartReducer = (state, action) => {
       const newCartItems = state.cartItems.filter(
         (item) => item.id !== action.payload.id
       );
+      setCartItems(newCartItems);
       return {
         ...state,
-        ...sumItems(newCartItems),
+        ...calculateQuantityAndTotal(newCartItems),
         cartItems: newCartItems,
       };
     }
@@ -67,9 +55,10 @@ const CartReducer = (state, action) => {
         }
         return item;
       });
+      setCartItems(updatedCartItems);
       return {
         ...state,
-        ...sumItems(updatedCartItems),
+        ...calculateQuantityAndTotal(updatedCartItems),
         cartItems: updatedCartItems,
       };
     }
@@ -81,9 +70,10 @@ const CartReducer = (state, action) => {
         }
         return item;
       });
+      setCartItems(newCartItems);
       return {
         ...state,
-        ...sumItems(newCartItems),
+        ...calculateQuantityAndTotal(newCartItems),
         cartItems: newCartItems,
       };
     }
@@ -95,24 +85,26 @@ const CartReducer = (state, action) => {
         }
         return item;
       });
+      setCartItems(newCartItems);
       return {
         ...state,
-        ...sumItems(newCartItems),
+        ...calculateQuantityAndTotal(newCartItems),
         cartItems: newCartItems,
       };
     }
 
     case SUBMIT:
+      setCartItems([]);
       return {
         cartItems: [],
-        submit: true,
-        ...sumItems([]),
+        ...calculateQuantityAndTotal([]),
       };
 
     case CLEAR:
+      setCartItems([]);
       return {
         cartItems: [],
-        ...sumItems([]),
+        ...calculateQuantityAndTotal([]),
       };
 
     default:
