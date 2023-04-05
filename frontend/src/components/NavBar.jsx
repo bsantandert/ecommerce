@@ -81,6 +81,11 @@ const NavBar = () => {
     </a>
   ));
 
+  const changeCurrentUser = (user) => {
+    setCurrentUser(user);
+    window.location.reload();
+  };
+
   return (
     <Header height={60} mb={120}>
       <Container className={classes.header}>
@@ -92,7 +97,7 @@ const NavBar = () => {
             rightSection={<IconUser size="1rem" />}
             data={[CUSTOMER, ADMIN]}
             defaultValue={getCurrentUser()}
-            onChange={setCurrentUser}
+            onChange={changeCurrentUser}
           />
         </Group>
       </Container>
