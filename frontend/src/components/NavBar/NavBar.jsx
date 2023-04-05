@@ -5,63 +5,31 @@ import {
   Header,
   Container,
   Group,
-  rem,
   Select,
   Image,
 } from "@mantine/core";
 import { IconShoppingCart, IconUser } from "@tabler/icons-react";
+import NavBarItem from "./NavBarItem";
 import {
   isCurrentUserAdmin,
   getCurrentUser,
   setCurrentUser,
-} from "../utils/user.utils";
-import { CUSTOMER, ADMIN } from "../constants/users.contants";
+} from "../../utils/user.utils";
+import { CUSTOMER, ADMIN } from "../../constants/users.contants";
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   header: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     height: "100%",
   },
-
-  link: {
-    display: "block",
-    lineHeight: 1,
-    padding: `${rem(8)} ${rem(12)}`,
-    borderRadius: theme.radius.sm,
-    textDecoration: "none",
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[0]
-        : theme.colors.gray[7],
-    fontSize: theme.fontSizes.sm,
-    fontWeight: 500,
-
-    "&:hover": {
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
-    },
-  },
-
-  linkActive: {
-    "&, &:hover": {
-      backgroundColor: theme.fn.variant({
-        variant: "light",
-        color: theme.primaryColor,
-      }).background,
-      color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
-        .color,
-    },
-  },
 }));
 
 const NavBar = () => {
   const location = useLocation();
   const [active, setActive] = useState("");
-  const { classes, cx } = useStyles();
+  const { classes } = useStyles();
   useEffect(() => {
     setActive(location.pathname);
   }, [location.pathname]);
@@ -78,19 +46,6 @@ const NavBar = () => {
         },
       ];
 
-  const items = links.map((link) => (
-    <a
-      key={link.label}
-      href={link.link}
-      className={cx(classes.link, {
-        [classes.linkActive]: active === link.link,
-      })}
-    >
-      {link.icon}
-      {!link.icon && link.label}
-    </a>
-  ));
-
   const changeCurrentUser = (user) => {
     setCurrentUser(user);
     window.location.reload();
@@ -101,7 +56,9 @@ const NavBar = () => {
       <Container className={classes.header}>
         <Image height={50} width={150} src="./logo.png" alt="logo" />
         <Group spacing={5}>
-          {items}
+          {links.map((link) => (
+            <NavBarItem link={link} active={active}></NavBarItem>
+          ))}
           <Select
             placeholder="User"
             rightSection={<IconUser size="1rem" />}

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Routes } from "react-router-dom";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/NavBar/NavBar";
 import { AppShell, Loader, Center } from "@mantine/core";
 import routes from "./routes/routes";
 
