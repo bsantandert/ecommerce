@@ -15,6 +15,14 @@ This Website requires 2 projects running:
 
 Each project has the required information for setup.
 
+## Implementation Notes - Improvements
+
+- There is no current user or logged user implementation, navigation has the select option that will simulate a type of user.
+- Stock of products is not updated, so you can just create as many orders based on the current stock of the product. (it has stock validation when you are adding the product to the order or updating the quantity in the cart page).
+- Order amount is being calculated in frontend, as a improvement we could move that to back-end service.
+- Using jest for tests, only added tests for util function in front-end and mappers in back-end.
+- Search is using Postgress `to_tsvector` and `websearch_to_tsquery`, right now `product` table is not configured with indexes or configurations for [performance improvements](https://www.postgresql.org/docs/current/textsearch-indexes.html).
+
 ## Usage
 
 The Website has 2 types of user, you can impersonate one or the order by using the select in the navigation bar, the page will be refreshed and the navigation options will change based on the user.
