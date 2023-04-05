@@ -31,6 +31,7 @@ const Products = () => {
         label="Search"
         placeholder="Search Product"
         rightSection={<IconSearch size="1rem" />}
+        style={{ marginBottom: "10px" }}
         onChange={search}
         data={productOptions}
       />

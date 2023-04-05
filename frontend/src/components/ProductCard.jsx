@@ -12,14 +12,11 @@ import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   card: {
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+    backgroundColor: theme.white,
   },
 
   section: {
-    borderBottom: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderBottom: `${rem(1)} solid ${theme.colors.gray[3]}`,
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
     paddingBottom: theme.spacing.md,
@@ -52,7 +49,12 @@ const ProductCard = ({ product, hideActions = false }) => {
       className={classes.card}
     >
       <Card.Section>
-        <Image src={product.image_url} alt={product.name} height={450} />
+        <Image
+          src={product.image_url}
+          alt={product.name}
+          height={450}
+          fit={"contain"}
+        />
       </Card.Section>
       <Card.Section className={classes.section} mt="md">
         <Group position="apart">

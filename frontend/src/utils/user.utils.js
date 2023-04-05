@@ -11,7 +11,7 @@ const setCurrentUser = (user) => {
 };
 
 const isCurrentUserAdmin = () => {
-  return getCurrentUser() == ADMIN;
+  return getCurrentUser() === ADMIN;
 };
 
 export { isCurrentUserAdmin, getCurrentUser, setCurrentUser };

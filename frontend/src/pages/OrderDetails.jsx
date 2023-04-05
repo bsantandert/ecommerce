@@ -4,42 +4,42 @@ import {
   createStyles,
   Group,
   Card,
-  Image,
   Text,
   Button,
   Container,
   Select,
 } from "@mantine/core";
+import ProductListItem from "../components/ProductListItem";
 import { fetchOrderById, updateOrder } from "../api/orders.api";
 import { fetchEmployees } from "../api/employees.api";
 import { PENDING, COMPLETED } from "../constants/orders.constants";
 import { isCurrentUserAdmin } from "../utils/user.utils";
 
-const useStyles = createStyles(() => ({
+const useStyles = createStyles((theme) => ({
+  container: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "25px",
+  },
   content: {
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "column",
+    flexGrow: 2,
   },
-  detail: {
+  options: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
-  },
-  info: {
-    display: "flex",
-    flexDirection: "row",
-    width: "200px",
+    padding: "10px",
   },
 }));
 
 const OrderDetails = () => {
   const navigate = useNavigate();
+  const { classes } = useStyles();
   const selectedEmployeeRef = useRef(0);
   const selectedStatusRef = useRef("");
   const [order, setOrder] = useState(null);
   const [employees, setEmployees] = useState([]);
-  const { classes } = useStyles();
   const { id } = useParams();
 
   const totalItems = order?.products.reduce(
@@ -81,58 +81,25 @@ const OrderDetails = () => {
   return (
     <>
       {order && (
-        <Container style={{ overflow: "auto" }}>
-          {order?.products.map((item, index) => (
-            <Card key={index} withBorder className={classes.content}>
-              <Image src={item.image_url} height={100} width={100} fit></Image>
-              <div className={classes.detail}>
-                <Text size="lg" fw={700}>
-                  {item.name}
-                </Text>
-                <div className={classes.info}>
-                  <Text
-                    size="md"
-                    color="dimmed"
-                    style={{ marginRight: "10px" }}
-                  >
-                    Quantity:
-                  </Text>
-                  <Text weight={500} size="sm">
-                    {item.quantity}
-                  </Text>
-                </div>
-                <div className={classes.info}>
-                  <Text
-                    size="md"
-                    color="dimmed"
-                    style={{ marginRight: "10px" }}
-                  >
-                    Subtotal:
-                  </Text>
-                  <Text weight={500} size="sm">
-                    {item.quantity * item.price} $
-                  </Text>
-                </div>
-              </div>
-            </Card>
-          ))}
-          <div>
-            <Card
-              withBorder
-              style={{ display: "flex", flexDirection: "column" }}
-            >
+        <Container className={classes.container}>
+          <div className={classes.content}>
+            {order?.products.map((item) => (
+              <ProductListItem key={item.id} product={item} />
+            ))}
+            <Card withBorder>
               <Group position="right">
                 <Text size="md" color="dimmed" style={{ marginRight: "10px" }}>
                   Total ({totalItems}) items:
                 </Text>
-                <Text weight={500} size="sm">
+                <Text weight={500} size="md">
                   {order?.amount} $
                 </Text>
               </Group>
             </Card>
           </div>
+
           {isCurrentUserAdmin() && (
-            <Group position="right" style={{ alignItems: "end" }}>
+            <div className={classes.options}>
               {employees && (
                 <Select
                   label="Employee Assigned"
@@ -146,7 +113,6 @@ const OrderDetails = () => {
                   }}
                 />
               )}
-
               <Select
                 label="Order Status"
                 placeholder="Status"
@@ -158,10 +124,12 @@ const OrderDetails = () => {
                   selectedStatusRef.current = newVal;
                 }}
               />
-              <Button radius="md" onClick={save}>
-                Save
-              </Button>
-            </Group>
+              <Group grow style={{ marginTop: "10px" }}>
+                <Button radius="md" onClick={save}>
+                  Save
+                </Button>
+              </Group>
+            </div>
           )}
         </Container>
       )}

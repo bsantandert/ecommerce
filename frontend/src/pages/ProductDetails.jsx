@@ -6,7 +6,6 @@ import CartContext from "../context/cart/CartContext";
 import {
   createStyles,
   Group,
-  rem,
   Card,
   Text,
   Button,
@@ -21,7 +20,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   content: {
-    maxWidth: rem(480),
+    minWidth: "300px",
     marginLeft: `calc(${theme.spacing.xl} * 3)`,
 
     [theme.fn.smallerThan("md")]: {
@@ -90,13 +89,8 @@ const ProductDetails = () => {
                   {quantity * product.price} $
                 </Text>
               </Group>
-              <Group mt="xs">
-                <Button
-                  radius="md"
-                  style={{ flex: 1 }}
-                  disabled={!isInStock}
-                  onClick={addToOrder}
-                >
+              <Group mt="xs" grow>
+                <Button radius="md" disabled={!isInStock} onClick={addToOrder}>
                   Add to Order
                 </Button>
               </Group>
