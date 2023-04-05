@@ -5,9 +5,12 @@ import {
   Anchor,
   Text,
   ScrollArea,
+  Tabs,
 } from "@mantine/core";
 
 import { fetchOrders } from "../api/orders.api";
+import { IconCheckupList, IconCheckbox } from "@tabler/icons-react";
+import { PENDING, COMPLETED } from "../constants/orders.constants";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -20,7 +23,7 @@ const Orders = () => {
     getOrders();
   }, []);
 
-  const rows = orders.map((order) => {
+  const buildTableRow = (order) => {
     return (
       <tr key={order.id}>
         <td>
@@ -32,28 +35,61 @@ const Orders = () => {
         <td>{order.status}</td>
         <td>
           <Text fz="xs" weight={700}>
-            {(new Date(order.created_at)).toLocaleDateString("en-US")}
+            {new Date(order.created_at).toLocaleDateString("en-US")}
           </Text>
         </td>
       </tr>
     );
-  });
+  };
+
+  const buildHeaderRow = () => {
+    return (
+      <tr>
+        <th>Id</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Created At</th>
+      </tr>
+    );
+  };
+
+  const completedOrderRows = orders
+    .filter((r) => r.status === COMPLETED)
+    .map(buildTableRow);
+  const pendingOrderRows = orders
+    .filter((r) => r.status === PENDING)
+    .map(buildTableRow);
 
   return (
     <Container>
-      <ScrollArea>
-        <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Created At</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
-      </ScrollArea>
+      <Tabs defaultValue={PENDING}>
+        <Tabs.List>
+          <Tabs.Tab value={PENDING} icon={<IconCheckupList size="1rem" />}>
+            {PENDING}
+          </Tabs.Tab>
+          <Tabs.Tab value={COMPLETED} icon={<IconCheckbox size="1rem" />}>
+            {COMPLETED}
+          </Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value={PENDING} pt="xs">
+          <ScrollArea>
+            <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
+              <thead>{buildHeaderRow()}</thead>
+              <tbody>{pendingOrderRows}</tbody>
+            </Table>
+          </ScrollArea>
+        </Tabs.Panel>
+
+        <Tabs.Panel value={COMPLETED} pt="xs">
+          <ScrollArea>
+            <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
+              <thead>{buildHeaderRow()}</thead>
+              <tbody>{completedOrderRows}</tbody>
+            </Table>
+          </ScrollArea>
+        </Tabs.Panel>
+      </Tabs>
     </Container>
   );
 };
