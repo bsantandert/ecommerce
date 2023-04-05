@@ -3,7 +3,7 @@ const db = require("./db.service");
 
 async function get() {
   const result = await db.query(
-    "SELECT id, amount, status, created_at FROM customer_order"
+    "SELECT id, amount, status, created_at, employee_id FROM customer_order"
   );
   const data = result.rows || [];
 
@@ -14,7 +14,7 @@ async function get() {
 
 async function getById(id) {
   const getOrderResult = await db.query(
-    "SELECT id, amount, status, created_at FROM customer_order WHERE id=$1",
+    "SELECT id, amount, status, created_at, employee_id FROM customer_order WHERE id=$1",
     [id]
   );
   const order = getOrderResult.rows[0];
@@ -42,12 +42,13 @@ async function create(order) {
     const currentDateTime = moment.utc().format();
     await client.query("BEGIN");
     const createOrderQuery =
-      "INSERT INTO customer_order (amount, status, created_at) VALUES ($1, $2, $3) RETURNING *";
+      "INSERT INTO customer_order (amount, status, created_at, employee_id) VALUES ($1, $2, $3, $4) RETURNING *";
 
     const createOrderResult = await client.query(createOrderQuery, [
       order.amount,
       order.status,
       currentDateTime,
+      order.employeeId,
     ]);
 
     const orderCreated = createOrderResult.rows[0];
@@ -77,28 +78,26 @@ async function create(order) {
 async function update(id, order) {
   const client = await db.pool.connect();
   try {
-    const productIds = order.productIds;
-
+    console.log("ID: ", id);
+    console.log("ORDER: ", order);
     await client.query("BEGIN");
 
-    const deleteOrderProductsQuery =
-      "DELETE FROM customer_order_product WHERE order_id=$1";
-    await client.query(deleteOrderProductsQuery, [id]);
+    await client.query(
+      "DELETE FROM customer_order_product WHERE customer_order_id=$1",
+      [id]
+    );
 
-    for (let index = 0; index < productIds.length; index++) {
-      const orderProductQuery =
-        "INSERT INTO customer_order_product(order_id, product_id) VALUES ($1, $2)";
-      await client.query(orderProductQuery, [id, productIds[index]]);
+    for (let index = 0; index < order.products.length; index++) {
+      await client.query(
+        "INSERT INTO customer_order_product(customer_order_id, product_id, quantity) VALUES ($1, $2, $3)",
+        [id, order.products[index].id, order.products[index].quantity]
+      );
     }
 
-    const updateOrderQuery =
-      "UPDATE customer_order SET amount=$1, status=$2 WHERE id=$3 RETURNING *";
-
-    const updateOrderResult = await client.query(updateOrderQuery, [
-      order.amount,
-      order.status,
-      id,
-    ]);
+    const updateOrderResult = await client.query(
+      "UPDATE customer_order SET amount=$1, status=$2, employee_id=$3 WHERE id=$4 RETURNING *",
+      [order.amount, order.status, order.employee_id, id]
+    );
     const orderUpdated = updateOrderResult.rows[0];
 
     await client.query("COMMIT");
