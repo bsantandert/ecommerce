@@ -78,8 +78,6 @@ async function create(order) {
 async function update(id, order) {
   const client = await db.pool.connect();
   try {
-    console.log("ID: ", id);
-    console.log("ORDER: ", order);
     await client.query("BEGIN");
 
     await client.query(

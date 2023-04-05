@@ -24,9 +24,9 @@ app.get("/", function (req, res) {
   res.send("Backend Service");
 });
 
-app.use("/products", productsRouter);
-app.use("/orders", ordersRouter);
-app.use("/employees", employeesRouter);
+app.use("/api/products", productsRouter);
+app.use("/api/orders", ordersRouter);
+app.use("/api/employees", employeesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
