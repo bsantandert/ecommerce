@@ -6,7 +6,7 @@ function mapToDtoModel(product) {
     description: product.description,
     stock: product.stock,
     price: product.price,
-    imageUrl: product.imageUrl,
+    imageUrl: product.image_url,
     quantity: product.quantity,
   };
 }

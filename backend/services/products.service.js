@@ -11,8 +11,6 @@ async function get(search) {
     OR (to_tsvector('english', description) @@ websearch_to_tsquery('english','${search}')) OR name ILIKE '%${search}%'`;
   }
   const productsResult = await db.query(productQuery);
-  console.log('PRODS: ', productsResult.rows);
-  console.log('PRODS MAPPED: ', productsResult.rows.map(productMapper.mapToDtoModel));
   return productsResult.rows.map(productMapper.mapToDtoModel);
 }
 

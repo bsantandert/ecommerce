@@ -98,7 +98,7 @@ async function update(id, order) {
     // Update order
     const updateOrderResult = await client.query(
       "UPDATE customer_order SET amount=$1, status=$2, employee_id=$3 WHERE id=$4 RETURNING *",
-      [order.amount, order.status, order.employee_id, id]
+      [order.amount, order.status, order.employeeId, id]
     );
     const orderUpdated = updateOrderResult.rows[0];
 
