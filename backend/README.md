@@ -17,7 +17,7 @@ This project was bootstrapped with Express Generator [https://expressjs.com/en/s
 
 ## Database configuration file
 
-The database configuration file has default values that can will be replaced by environment variables.
+The database configuration file has default values that can be replaced by environment variables.
 
 ```ts
 {
