@@ -19,7 +19,7 @@ async function getById(req, res, next) {
     }
     res.json({ data: order });
   } catch (err) {
-    console.error(`Error while getting orders`, err.message);
+    console.error(`Error while getting order`, err.message);
     res.status(500).json({ message: err.message });
   }
 }

@@ -9,6 +9,13 @@ const pool = new Pool({
   port: dbConfig.port,
 });
 
+/**
+ * Query function to retrieve data based on query string
+ * Note: No need to check out or release a client. The pool is doing the acquiring and releasing internally.
+ * @param {*} sql
+ * @param {*} params
+ * @returns
+ */
 async function query(sql, params) {
   return pool.query(sql, params);
 }

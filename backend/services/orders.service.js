@@ -4,6 +4,10 @@ const dbCostants = require("../constants/db.constant");
 const orderMapper = require("../mappers/order.mapper");
 const productMapper = require("../mappers/product.mapper");
 
+/**
+ * Returns all orders
+ * @returns Orders array
+ */
 async function get() {
   const result = await db.query(
     "SELECT id, amount, status, created_at, employee_id FROM customer_order"
@@ -12,6 +16,12 @@ async function get() {
   return result.rows.map(orderMapper.mapToDtoModel);
 }
 
+/**
+ * Returns order by identifier, if "includeProductsInfo" is true it will also return the products in the order.
+ * @param {*} id Order identifier
+ * @param {*} includeProductsInfo Flag to include products information
+ * @returns Single order
+ */
 async function getById(id, includeProductsInfo = false) {
   const getOrderResult = await db.query(
     "SELECT id, amount, status, created_at, employee_id FROM customer_order WHERE id=$1",
@@ -41,6 +51,11 @@ async function getById(id, includeProductsInfo = false) {
   };
 }
 
+/**
+ * Creates an order
+ * @param {*} order Object with order data
+ * @returns Order created
+ */
 async function create(order) {
   const client = await db.pool.connect();
   try {
@@ -76,6 +91,12 @@ async function create(order) {
   }
 }
 
+/**
+ * Updates an order
+ * @param {*} id Order identifier
+ * @param {*} order Object with order data
+ * @returns Order Updated
+ */
 async function update(id, order) {
   const client = await db.pool.connect();
   try {
@@ -112,6 +133,11 @@ async function update(id, order) {
   }
 }
 
+/**
+ * Removed an order
+ * @param {*} id Order identifier
+ * @returns Order identifier
+ */
 async function remove(id) {
   const client = await db.pool.connect();
   try {
