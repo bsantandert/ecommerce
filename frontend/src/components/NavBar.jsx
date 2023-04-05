@@ -10,7 +10,11 @@ import {
   Image,
 } from "@mantine/core";
 import { IconShoppingCart, IconUser } from "@tabler/icons-react";
-import { getCurrentUser, setCurrentUser } from "../utils/user.utils";
+import {
+  isCurrentUserAdmin,
+  getCurrentUser,
+  setCurrentUser,
+} from "../utils/user.utils";
 import { CUSTOMER, ADMIN } from "../constants/users.contants";
 
 const useStyles = createStyles((theme) => ({
@@ -62,11 +66,17 @@ const NavBar = () => {
     setActive(location.pathname);
   }, [location.pathname]);
 
-  const links = [
-    { label: "Products", link: "/products" },
-    { label: "Orders", link: "/orders" },
-    { label: "Cart", link: "/cart", icon: <IconShoppingCart size="1rem" /> },
-  ];
+  const links = isCurrentUserAdmin()
+    ? [{ label: "Orders", link: "/orders" }]
+    : [
+        { label: "Products", link: "/products" },
+        { label: "Orders", link: "/orders" },
+        {
+          label: "Cart",
+          link: "/cart",
+          icon: <IconShoppingCart size="1rem" />,
+        },
+      ];
 
   const items = links.map((link) => (
     <a

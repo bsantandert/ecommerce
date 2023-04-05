@@ -1,4 +1,4 @@
-import { CUSTOMER, USER_KEY } from "../constants/users.contants";
+import { ADMIN, CUSTOMER, USER_KEY } from "../constants/users.contants";
 
 const getCurrentUser = () => {
   return localStorage.getItem(USER_KEY)
@@ -10,4 +10,8 @@ const setCurrentUser = (user) => {
   localStorage.setItem(USER_KEY, user);
 };
 
-export { getCurrentUser, setCurrentUser };
+const isCurrentUserAdmin = () => {
+  return getCurrentUser() == ADMIN;
+};
+
+export { isCurrentUserAdmin, getCurrentUser, setCurrentUser };

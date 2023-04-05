@@ -13,8 +13,9 @@ import {
 import { fetchOrderById, updateOrder } from "../api/orders.api";
 import { fetchEmployees } from "../api/employees.api";
 import { PENDING, COMPLETED } from "../constants/orders.constants";
+import { isCurrentUserAdmin } from "../utils/user.utils";
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   content: {
     display: "flex",
     flexDirection: "row",
@@ -130,36 +131,38 @@ const OrderDetails = () => {
               </Group>
             </Card>
           </div>
-          <Group position="right" style={{ alignItems: "end" }}>
-            {employees && (
+          {isCurrentUserAdmin() && (
+            <Group position="right" style={{ alignItems: "end" }}>
+              {employees && (
+                <Select
+                  label="Employee Assigned"
+                  placeholder="Employee"
+                  defaultValue={selectedEmployeeRef.current}
+                  description="Select an employee for order fulfillment"
+                  dropdownPosition="bottom"
+                  data={employees}
+                  onChange={(newVal) => {
+                    selectedEmployeeRef.current = newVal;
+                  }}
+                />
+              )}
+
               <Select
-                label="Employee Assigned"
-                placeholder="Employee"
-                defaultValue={selectedEmployeeRef.current}
-                description="Select an employee for order fulfillment"
+                label="Order Status"
+                placeholder="Status"
+                description="Pending or Completed"
                 dropdownPosition="bottom"
-                data={employees}
+                defaultValue={selectedStatusRef.current}
+                data={[PENDING, COMPLETED]}
                 onChange={(newVal) => {
-                  selectedEmployeeRef.current = newVal;
+                  selectedStatusRef.current = newVal;
                 }}
               />
-            )}
-
-            <Select
-              label="Order Status"
-              placeholder="Status"
-              description="Pending or Completed"
-              dropdownPosition="bottom"
-              defaultValue={selectedStatusRef.current}
-              data={[PENDING, COMPLETED]}
-              onChange={(newVal) => {
-                selectedStatusRef.current = newVal;
-              }}
-            />
-            <Button radius="md" onClick={save}>
-              Save
-            </Button>
-          </Group>
+              <Button radius="md" onClick={save}>
+                Save
+              </Button>
+            </Group>
+          )}
         </Container>
       )}
     </>
