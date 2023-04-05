@@ -10,21 +10,25 @@ const Cart = lazy(() => import("../pages/Cart"));
 const NoMatch = lazy(() => import("../pages/NoMatch"));
 
 const isAdmin = isCurrentUserAdmin();
+const defaultAdminRoute = "/orders";
 
 const routes = [
+  <Route path="/" element={<Navigate to="/products" />} />,
   <Route
     path="/products"
-    element={!isAdmin ? <Products /> : <Navigate to="/orders" />}
+    element={!isAdmin ? <Products /> : <Navigate to={defaultAdminRoute} />}
+  />,
+  <Route
+    path="/products/:id"
+    element={
+      !isAdmin ? <ProductDetails /> : <Navigate to={defaultAdminRoute} />
+    }
   />,
   <Route path="/orders" element={<Orders />} />,
   <Route path="/orders/:id" element={<OrderDetails />} />,
   <Route
     path="/cart"
-    element={!isAdmin ? <Cart /> : <Navigate to="/orders" />}
-  />,
-  <Route
-    path="/products/:id"
-    element={!isAdmin ? <ProductDetails /> : <Navigate to="/orders" />}
+    element={!isAdmin ? <Cart /> : <Navigate to={defaultAdminRoute} />}
   />,
   <Route path="*" element={<NoMatch />} />,
 ];
