@@ -36,7 +36,7 @@ const Products = () => {
       />
 
       <SimpleGrid cols={3} spacing="lg" verticalSpacing="xl">
-        {products.map((product, index) => (
+        {products?.map((product, index) => (
           <ProductCard key={index} product={product}></ProductCard>
         ))}
       </SimpleGrid>
