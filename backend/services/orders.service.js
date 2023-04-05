@@ -1,5 +1,6 @@
 var moment = require("moment");
 const db = require("./db.service");
+const dbCostants = require("../constants/db.constant");
 
 async function get() {
   const result = await db.query(
@@ -40,7 +41,7 @@ async function create(order) {
   const client = await db.pool.connect();
   try {
     const currentDateTime = moment.utc().format();
-    await client.query("BEGIN");
+    await client.query(dbCostants.BEGIN);
     const createOrderQuery =
       "INSERT INTO customer_order (amount, status, created_at, employee_id) VALUES ($1, $2, $3, $4) RETURNING *";
 
@@ -55,7 +56,7 @@ async function create(order) {
 
     for (let index = 0; index < order.products.length; index++) {
       const orderProductQuery =
-        "INSERT INTO customer_order_product(customer_order_id, product_id, quantity) VALUES ($1, $2, $3)";
+        "INSERT INTO customer_order_product (customer_order_id, product_id, quantity) VALUES ($1, $2, $3)";
       await client.query(orderProductQuery, [
         orderCreated.id,
         order.products[index].id,
@@ -63,12 +64,12 @@ async function create(order) {
       ]);
     }
 
-    await client.query("COMMIT");
+    await client.query(dbCostants.COMMIT);
     return {
       data: orderCreated,
     };
   } catch (e) {
-    await client.query("ROLLBACK");
+    await client.query(dbCostants.ROLLBACK);
     throw e;
   } finally {
     client.release();
@@ -78,7 +79,7 @@ async function create(order) {
 async function update(id, order) {
   const client = await db.pool.connect();
   try {
-    await client.query("BEGIN");
+    await client.query(dbCostants.BEGIN);
 
     await client.query(
       "DELETE FROM customer_order_product WHERE customer_order_id=$1",
@@ -98,12 +99,12 @@ async function update(id, order) {
     );
     const orderUpdated = updateOrderResult.rows[0];
 
-    await client.query("COMMIT");
+    await client.query(dbCostants.COMMIT);
     return {
       data: orderUpdated,
     };
   } catch (e) {
-    await client.query("ROLLBACK");
+    await client.query(dbCostants.ROLLBACK);
     throw e;
   } finally {
     client.release();
@@ -113,7 +114,7 @@ async function update(id, order) {
 async function remove(id) {
   const client = await db.pool.connect();
   try {
-    await client.query("BEGIN");
+    await client.query(dbCostants.BEGIN);
 
     const deleteOrderProductsQuery =
       "DELETE FROM customer_order_product WHERE order_id=$1";
@@ -123,12 +124,12 @@ async function remove(id) {
 
     await client.query(deleteOrderQuery, [id]);
 
-    await client.query("COMMIT");
+    await client.query(dbCostants.COMMIT);
     return {
       data: id,
     };
   } catch (e) {
-    await client.query("ROLLBACK");
+    await client.query(dbCostants.ROLLBACK);
     throw e;
   } finally {
     client.release();
