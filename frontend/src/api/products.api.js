@@ -1,0 +1,18 @@
+import { fetchData } from "./fetchAPI";
+import { notifications } from "@mantine/notifications";
+
+const fetchProducts = async (search) => {
+  try {
+    return await fetchData(search ? `products?search=${search}` : "products");
+  } catch (error) {
+    notifications.show({
+      title: "Error ocurred while fetching products",
+      message: error.message,
+      autoClose: false,
+      color: "red",
+    });
+    return [];
+  }
+};
+
+export { fetchProducts };

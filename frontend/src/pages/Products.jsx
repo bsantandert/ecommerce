@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchData } from "../api/fetchAPI";
+import { fetchProducts } from "../api/products.api";
 import { SimpleGrid, Container, Autocomplete } from "@mantine/core";
 import ProductCard from "../components/ProductCard";
 import { IconSearch } from "@tabler/icons-react";
@@ -12,13 +12,11 @@ const Products = () => {
 
   useEffect(() => {
     const searchString = searchParams.get("search");
-    const fetchProducts = async () => {
-      const products = await fetchData(
-        searchString ? `products?search=${searchString}` : "products"
-      );
+    const getProducts = async () => {
+      const products = await fetchProducts(searchString);
       setProducts(products.data);
     };
-    fetchProducts();
+    getProducts();
   }, [searchParams]);
 
   const search = (value) => {
@@ -37,8 +35,8 @@ const Products = () => {
       />
 
       <SimpleGrid cols={3} spacing="lg" verticalSpacing="xl">
-        {products.map((product) => (
-          <ProductCard product={product}></ProductCard>
+        {products.map((product, index) => (
+          <ProductCard key={index} product={product}></ProductCard>
         ))}
       </SimpleGrid>
     </Container>

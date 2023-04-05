@@ -41,13 +41,7 @@ const ProductCard = ({ product, hideActions = false }) => {
     navigate(`/products/${productId}`);
   };
   return (
-    <Card
-      key={product.id}
-      withBorder
-      radius="md"
-      p="md"
-      className={classes.card}
-    >
+    <Card withBorder radius="md" p="md" className={classes.card}>
       <Card.Section>
         <Image
           src={product.image_url}
