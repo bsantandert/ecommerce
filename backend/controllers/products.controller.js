@@ -5,7 +5,7 @@ async function get(req, res, next) {
     res.json(await productsService.get(req.query.search));
   } catch (err) {
     console.error(`Error while getting products`, err.message);
-    next(err);
+    res.status(500).json({ message: err.message });
   }
 }
 
@@ -14,7 +14,7 @@ async function getById(req, res, next) {
     res.json(await productsService.getById(req.params.id));
   } catch (err) {
     console.error(`Error while getting product`, err.message);
-    next(err);
+    res.status(500).json({ message: err.message });
   }
 }
 

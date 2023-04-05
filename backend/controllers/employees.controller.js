@@ -5,7 +5,7 @@ async function get(req, res, next) {
     res.json(await employeesService.get());
   } catch (err) {
     console.error(`Error while getting employees`, err.message);
-    next(err);
+    res.status(500).json({ message: err.message });
   }
 }
 
