@@ -7,12 +7,14 @@ import {
   ScrollArea,
   Tabs,
 } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 import { fetchOrders } from "../api/orders.api";
 import { IconCheckupList, IconCheckbox } from "@tabler/icons-react";
 import { PENDING, COMPLETED } from "../constants/orders.constants";
 
 const Orders = () => {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -24,10 +26,14 @@ const Orders = () => {
   }, []);
 
   const buildTableRow = (order) => {
+    const goToOrderDetail = () => {
+      navigate(`/orders/${order.id}`);
+    };
+
     return (
       <tr key={order.id}>
         <td>
-          <Anchor fz="sm" href={`/orders/${order.id}`}>
+          <Anchor fz="sm" onClick={goToOrderDetail}>
             {order.id}
           </Anchor>
         </td>
