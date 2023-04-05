@@ -76,7 +76,12 @@ const Orders = () => {
 
         <Tabs.Panel value={PENDING} pt="xs">
           <ScrollArea>
-            <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
+            <Table
+              sx={{ minWidth: 800 }}
+              verticalSpacing="xs"
+              highlightOnHover
+              withBorder
+            >
               {buildTableHeader()}
               <tbody>{pendingOrderRows}</tbody>
             </Table>
@@ -85,7 +90,12 @@ const Orders = () => {
 
         <Tabs.Panel value={COMPLETED} pt="xs">
           <ScrollArea>
-            <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
+            <Table
+              sx={{ minWidth: 800 }}
+              verticalSpacing="xs"
+              highlightOnHover
+              withBorder
+            >
               {buildTableHeader()}
               <tbody>{completedOrderRows}</tbody>
             </Table>
