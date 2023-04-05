@@ -61,10 +61,12 @@ const CartReducer = (state, action) => {
     }
 
     case UPDATE_ITEM: {
-      const updatedCartItems = [
-        ...state.cartItems.filter((item) => item.id !== action.payload.id),
-        action.payload,
-      ];
+      const updatedCartItems = state.cartItems.map((item) => {
+        if (item.id === action.payload.id) {
+          return { ...item, ...action.payload };
+        }
+        return item;
+      });
       return {
         ...state,
         ...sumItems(updatedCartItems),
