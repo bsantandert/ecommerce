@@ -17,7 +17,7 @@ const Products = () => {
       setProducts(products.data);
     };
     getProducts();
-  }, [searchParams]);
+  }, [searchParams, searchString]);
 
   const search = (value) => {
     setSearchParams(`search=${value}`);
