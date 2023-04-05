@@ -42,14 +42,16 @@ const Orders = () => {
     );
   };
 
-  const buildHeaderRow = () => {
+  const buildTableHeader = () => {
     return (
-      <tr>
-        <th>Id</th>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Created At</th>
-      </tr>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
     );
   };
 
@@ -75,7 +77,7 @@ const Orders = () => {
         <Tabs.Panel value={PENDING} pt="xs">
           <ScrollArea>
             <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
-              <thead>{buildHeaderRow()}</thead>
+              {buildTableHeader()}
               <tbody>{pendingOrderRows}</tbody>
             </Table>
           </ScrollArea>
@@ -84,7 +86,7 @@ const Orders = () => {
         <Tabs.Panel value={COMPLETED} pt="xs">
           <ScrollArea>
             <Table sx={{ minWidth: 800 }} verticalSpacing="xs">
-              <thead>{buildHeaderRow()}</thead>
+              {buildTableHeader()}
               <tbody>{completedOrderRows}</tbody>
             </Table>
           </ScrollArea>
