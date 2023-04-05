@@ -25,7 +25,7 @@ const ProductListItem = ({ product }) => {
   return (
     <Card withBorder className={classes.content}>
       <Image
-        src={product.image_url}
+        src={product.imageUrl}
         height={100}
         width={100}
         fit={"contain"}

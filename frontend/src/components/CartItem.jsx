@@ -24,7 +24,7 @@ const CartItem = ({ item, onItemChange, onItemRemoved }) => {
 
   return (
     <Card withBorder className={classes.content}>
-      <Image src={item.image_url} height={100} width={100} fit></Image>
+      <Image src={item.imageUrl} height={100} width={100} fit></Image>
       <div className={classes.detail}>
         <Text size="lg" fw={700}>
           {item.name}

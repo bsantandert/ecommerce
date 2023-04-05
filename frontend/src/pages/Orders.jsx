@@ -35,7 +35,7 @@ const Orders = () => {
         <td>{order.status}</td>
         <td>
           <Text fz="xs" weight={700}>
-            {new Date(order.created_at).toLocaleDateString("en-US")}
+            {new Date(order.createdAt).toLocaleDateString("en-US")}
           </Text>
         </td>
       </tr>

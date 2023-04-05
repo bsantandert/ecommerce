@@ -44,7 +44,7 @@ const ProductCard = ({ product, hideActions = false }) => {
     <Card withBorder radius="md" p="md" className={classes.card}>
       <Card.Section>
         <Image
-          src={product.image_url}
+          src={product.imageUrl}
           alt={product.name}
           height={450}
           fit={"contain"}

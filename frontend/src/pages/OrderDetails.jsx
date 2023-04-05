@@ -60,7 +60,7 @@ const OrderDetails = () => {
           label: emp.name,
         }))
       );
-      selectedEmployeeRef.current = order.data.employee_id;
+      selectedEmployeeRef.current = order.data.employeeId;
       selectedStatusRef.current = order.data.status;
     };
 
@@ -70,7 +70,7 @@ const OrderDetails = () => {
   const save = async () => {
     const orderToUpdate = {
       ...order,
-      employee_id: selectedEmployeeRef.current,
+      employeeId: selectedEmployeeRef.current,
       status: selectedStatusRef.current,
     };
     await updateOrder(orderToUpdate, () => {
