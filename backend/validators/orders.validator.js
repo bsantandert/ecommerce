@@ -8,7 +8,7 @@ const orderSchema = yup
       .string()
       .required()
       .oneOf([orderConstants.PENDING, orderConstants.COMPLETED]),
-    employee_id: yup.number().optional().min(1),
+    employeeId: yup.number().optional().min(1),
     products: yup.array().required().min(1),
   })
   .required();
