@@ -3,16 +3,15 @@ const db = require("./db.service");
 async function get(search) {
   let productQuery =
     "SELECT id, sku, name, description, stock, price, image_url FROM product";
+
+  // Modify query in case we have to search items
   if (search) {
     productQuery = `${productQuery} WHERE (to_tsvector('english', name) @@ websearch_to_tsquery('english','${search}')) 
     OR (to_tsvector('english', description) @@ websearch_to_tsquery('english','${search}')) OR name ILIKE '%${search}%'`;
   }
-  const result = await db.query(productQuery);
-  const data = result.rows || [];
+  const productsResult = await db.query(productQuery);
 
-  return {
-    data,
-  };
+  return productsResult.rows;
 }
 
 async function getById(id) {
@@ -20,11 +19,8 @@ async function getById(id) {
     "SELECT id, sku, name, description, stock, price, image_url FROM product WHERE id=$1",
     [id]
   );
-  const data = result.rows[0];
 
-  return {
-    data,
-  };
+  return result.rows[0];
 }
 
 module.exports = {

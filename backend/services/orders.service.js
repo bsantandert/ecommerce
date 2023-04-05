@@ -6,11 +6,8 @@ async function get() {
   const result = await db.query(
     "SELECT id, amount, status, created_at, employee_id FROM customer_order"
   );
-  const data = result.rows || [];
 
-  return {
-    data,
-  };
+  return result.rows;
 }
 
 async function getById(id) {
@@ -20,6 +17,7 @@ async function getById(id) {
   );
   const order = getOrderResult.rows[0];
 
+  // Get products info from order
   const orderProductsResult = await db.query(
     `SELECT pro.id, pro.name, pro.description, pro.price, pro.image_url, pro.sku, cop.quantity 
     FROM product AS pro INNER JOIN customer_order_product AS cop ON pro.id = cop.product_id 
@@ -30,10 +28,8 @@ async function getById(id) {
   const orderProducts = orderProductsResult.rows;
 
   return {
-    data: {
-      ...order,
-      products: orderProducts,
-    },
+    ...order,
+    products: orderProducts,
   };
 }
 
@@ -42,18 +38,16 @@ async function create(order) {
   try {
     const currentDateTime = moment.utc().format();
     await client.query(dbCostants.BEGIN);
-    const createOrderQuery =
-      "INSERT INTO customer_order (amount, status, created_at, employee_id) VALUES ($1, $2, $3, $4) RETURNING *";
 
-    const createOrderResult = await client.query(createOrderQuery, [
-      order.amount,
-      order.status,
-      currentDateTime,
-      order.employeeId,
-    ]);
+    // Create order
+    const createOrderResult = await client.query(
+      "INSERT INTO customer_order (amount, status, created_at, employee_id) VALUES ($1, $2, $3, $4) RETURNING *",
+      [order.amount, order.status, currentDateTime, order.employeeId]
+    );
 
     const orderCreated = createOrderResult.rows[0];
 
+    // Create products for order
     for (let index = 0; index < order.products.length; index++) {
       const orderProductQuery =
         "INSERT INTO customer_order_product (customer_order_id, product_id, quantity) VALUES ($1, $2, $3)";
@@ -65,9 +59,7 @@ async function create(order) {
     }
 
     await client.query(dbCostants.COMMIT);
-    return {
-      data: orderCreated,
-    };
+    return orderCreated;
   } catch (e) {
     await client.query(dbCostants.ROLLBACK);
     throw e;
@@ -81,11 +73,13 @@ async function update(id, order) {
   try {
     await client.query(dbCostants.BEGIN);
 
+    // Remove products from order
     await client.query(
       "DELETE FROM customer_order_product WHERE customer_order_id=$1",
       [id]
     );
 
+    // Create again order products in case of changes
     for (let index = 0; index < order.products.length; index++) {
       await client.query(
         "INSERT INTO customer_order_product(customer_order_id, product_id, quantity) VALUES ($1, $2, $3)",
@@ -93,6 +87,7 @@ async function update(id, order) {
       );
     }
 
+    // Update order
     const updateOrderResult = await client.query(
       "UPDATE customer_order SET amount=$1, status=$2, employee_id=$3 WHERE id=$4 RETURNING *",
       [order.amount, order.status, order.employee_id, id]
@@ -100,9 +95,7 @@ async function update(id, order) {
     const orderUpdated = updateOrderResult.rows[0];
 
     await client.query(dbCostants.COMMIT);
-    return {
-      data: orderUpdated,
-    };
+    return orderUpdated;
   } catch (e) {
     await client.query(dbCostants.ROLLBACK);
     throw e;
@@ -116,18 +109,16 @@ async function remove(id) {
   try {
     await client.query(dbCostants.BEGIN);
 
-    const deleteOrderProductsQuery =
-      "DELETE FROM customer_order_product WHERE order_id=$1";
-    await client.query(deleteOrderProductsQuery, [id]);
-
-    const deleteOrderQuery = "DELETE FROM customer_order WHERE id=$1";
-
-    await client.query(deleteOrderQuery, [id]);
+    // Remove products from order
+    await client.query("DELETE FROM customer_order_product WHERE order_id=$1", [
+      id,
+    ]);
+    // Remove order
+    await client.query("DELETE FROM customer_order WHERE id=$1", [id]);
 
     await client.query(dbCostants.COMMIT);
-    return {
-      data: id,
-    };
+
+    return id;
   } catch (e) {
     await client.query(dbCostants.ROLLBACK);
     throw e;
