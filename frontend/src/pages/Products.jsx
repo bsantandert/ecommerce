@@ -9,9 +9,9 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const productOptions = products.map((p) => p.name);
+  const searchString = searchParams.get("search") || "";
 
   useEffect(() => {
-    const searchString = searchParams.get("search");
     const getProducts = async () => {
       const products = await fetchProducts(searchString);
       setProducts(products.data);
@@ -31,6 +31,7 @@ const Products = () => {
         rightSection={<IconSearch size="1rem" />}
         style={{ marginBottom: "10px" }}
         onChange={search}
+        defaultValue={searchString}
         data={productOptions}
       />
 
