@@ -1,7 +1,7 @@
 import { fetchData } from "./fetchAPI";
 import { notifications } from "@mantine/notifications";
 
-const submitOrder = async (cartItems, amount, status, onSuccess) => {
+const createOrder = async (cartItems, amount, status, onSuccess) => {
   try {
     const products = cartItems.map((item) => ({
       id: item.id,
@@ -25,6 +25,29 @@ const submitOrder = async (cartItems, amount, status, onSuccess) => {
   } catch (error) {
     notifications.show({
       title: "Error ocurred while creating the order",
+      message: error.message,
+      autoClose: false,
+      color: "red",
+    });
+  }
+};
+
+const updateOrder = async (order, onSuccess) => {
+  try {
+    const options = {
+      method: "PUT",
+      body: JSON.stringify(order),
+    };
+
+    await fetchData(`orders/${order.id}`, options);
+    notifications.show({
+      title: "Order Updated Successfully",
+      autoClose: true,
+    });
+    onSuccess();
+  } catch (error) {
+    notifications.show({
+      title: "Error ocurred while updating the order",
       message: error.message,
       autoClose: false,
       color: "red",
@@ -60,4 +83,4 @@ const fetchOrderById = async (id) => {
   }
 };
 
-export { fetchOrders, fetchOrderById, submitOrder };
+export { fetchOrders, fetchOrderById, createOrder, updateOrder };
