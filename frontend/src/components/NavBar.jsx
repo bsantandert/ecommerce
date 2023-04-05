@@ -6,9 +6,12 @@ import {
   Container,
   Group,
   rem,
-  ActionIcon,
+  Select,
+  Image,
 } from "@mantine/core";
-import { IconShoppingCart } from "@tabler/icons-react";
+import { IconShoppingCart, IconUser } from "@tabler/icons-react";
+import { getCurrentUser, setCurrentUser } from "../utils/user.utils";
+import { CUSTOMER, ADMIN } from "../constants/users.contants";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -73,19 +76,25 @@ const NavBar = () => {
         [classes.linkActive]: active === link.link,
       })}
     >
-      {link.icon && (
-        <ActionIcon size="xl" variant="default">
-          {link.icon}
-        </ActionIcon>
-      )}
+      {link.icon}
       {!link.icon && link.label}
     </a>
   ));
+
   return (
     <Header height={60} mb={120}>
       <Container className={classes.header}>
-        <img height={50} src="./logo.png" alt="logo"></img>
-        <Group spacing={5}>{items}</Group>
+        <Image height={50} width={150} src="./logo.png" alt="logo" />
+        <Group spacing={5}>
+          {items}
+          <Select
+            placeholder="User"
+            rightSection={<IconUser size="1rem" />}
+            data={[CUSTOMER, ADMIN]}
+            defaultValue={getCurrentUser()}
+            onChange={setCurrentUser}
+          />
+        </Group>
       </Container>
     </Header>
   );
