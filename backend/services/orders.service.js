@@ -1,13 +1,15 @@
 var moment = require("moment");
 const db = require("./db.service");
 const dbCostants = require("../constants/db.constant");
+const orderMapper = require("../mappers/order.mapper");
+const productMapper = require("../mappers/product.mapper");
 
 async function get() {
   const result = await db.query(
     "SELECT id, amount, status, created_at, employee_id FROM customer_order"
   );
 
-  return result.rows;
+  return result.rows.map(orderMapper.mapToDtoModel);
 }
 
 async function getById(id, includeProductsInfo = false) {
@@ -20,7 +22,7 @@ async function getById(id, includeProductsInfo = false) {
   if (!order) return null;
 
   if (!includeProductsInfo) {
-    return order;
+    return orderMapper.mapToDtoModel(order);
   }
 
   // Get products info from order
@@ -34,8 +36,8 @@ async function getById(id, includeProductsInfo = false) {
   const orderProducts = orderProductsResult.rows;
 
   return {
-    ...order,
-    products: orderProducts,
+    ...orderMapper.mapToDtoModel(order),
+    products: orderProducts.map(productMapper.mapToDtoModel),
   };
 }
 
@@ -65,7 +67,7 @@ async function create(order) {
     }
 
     await client.query(dbCostants.COMMIT);
-    return orderCreated;
+    return orderMapper.mapToDtoModel(orderCreated);
   } catch (e) {
     await client.query(dbCostants.ROLLBACK);
     throw e;
@@ -101,7 +103,7 @@ async function update(id, order) {
     const orderUpdated = updateOrderResult.rows[0];
 
     await client.query(dbCostants.COMMIT);
-    return orderUpdated;
+    return orderMapper.mapToDtoModel(orderUpdated);
   } catch (e) {
     await client.query(dbCostants.ROLLBACK);
     throw e;

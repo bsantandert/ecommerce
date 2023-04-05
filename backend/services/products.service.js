@@ -1,4 +1,5 @@
 const db = require("./db.service");
+const productMapper = require("../mappers/product.mapper");
 
 async function get(search) {
   let productQuery =
@@ -10,8 +11,9 @@ async function get(search) {
     OR (to_tsvector('english', description) @@ websearch_to_tsquery('english','${search}')) OR name ILIKE '%${search}%'`;
   }
   const productsResult = await db.query(productQuery);
-
-  return productsResult.rows;
+  console.log('PRODS: ', productsResult.rows);
+  console.log('PRODS MAPPED: ', productsResult.rows.map(productMapper.mapToDtoModel));
+  return productsResult.rows.map(productMapper.mapToDtoModel);
 }
 
 async function getById(id) {
@@ -20,7 +22,7 @@ async function getById(id) {
     [id]
   );
 
-  return result.rows[0];
+  return productMapper.mapToDtoModel(result.rows[0]);
 }
 
 module.exports = {
