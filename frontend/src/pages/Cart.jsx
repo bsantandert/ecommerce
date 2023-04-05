@@ -13,7 +13,7 @@ import {
   NumberInput,
 } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
-import { submitOrder } from "../api/orders.api";
+import { createOrder } from "../api/orders.api";
 import { PENDING } from "../constants/orders.constants";
 
 const useStyles = createStyles(() => ({
@@ -48,7 +48,7 @@ const Cart = () => {
   };
 
   const submit = async () => {
-    await submitOrder(cartItems, total, PENDING, () => {
+    await createOrder(cartItems, total, PENDING, () => {
       navigate("/products");
       clearCart();
     });
