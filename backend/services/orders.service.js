@@ -10,18 +10,24 @@ async function get() {
   return result.rows;
 }
 
-async function getById(id) {
+async function getById(id, includeProductsInfo = false) {
   const getOrderResult = await db.query(
     "SELECT id, amount, status, created_at, employee_id FROM customer_order WHERE id=$1",
     [id]
   );
   const order = getOrderResult.rows[0];
 
+  if (!order) return null;
+
+  if (!includeProductsInfo) {
+    return order;
+  }
+
   // Get products info from order
   const orderProductsResult = await db.query(
     `SELECT pro.id, pro.name, pro.description, pro.price, pro.image_url, pro.sku, cop.quantity 
-    FROM product AS pro INNER JOIN customer_order_product AS cop ON pro.id = cop.product_id 
-    WHERE cop.customer_order_id = $1`,
+  FROM product AS pro INNER JOIN customer_order_product AS cop ON pro.id = cop.product_id 
+  WHERE cop.customer_order_id = $1`,
     [id]
   );
 
