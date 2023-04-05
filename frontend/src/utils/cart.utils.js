@@ -18,9 +18,11 @@ const calculateQuantityAndTotal = (cartItems) => {
     (total, product) => total + product.quantity,
     0
   );
-  let total = cartItems
-    .reduce((total, product) => total + product.price * product.quantity, 0)
-    .toFixed(2);
+  let total = parseFloat(
+    cartItems
+      .reduce((total, product) => total + product.price * product.quantity, 0)
+      .toFixed(2)
+  );
   return { itemCount, total };
 };
 
